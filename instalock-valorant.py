@@ -1,5 +1,6 @@
 import pyautogui
 from time import sleep
+import random
 
 
 agents = ["Breach", "Brimstone", "Chamber", "Cypher", "Fade", "Jett", "BOT", "Killjoy", "Neon", "Omen", "Phoenix",
@@ -19,14 +20,16 @@ $$$$$$\ $$ | \$$ |\$$$$$$  |  $$ |   $$ |  $$ |$$$$$$$$\ $$$$$$  |\$$$$$$  |$$ |
 '''
 print(art)
 
+screen = pyautogui.screenshot("myscreen.png", region=(580, 722, 830, 240))
 
 def lock_agent(path_to_agent_png, coords, working_mode):
     agent_has_been_choosen = False
     if working_mode == "1":  # работа по координатам
-        print("Выбрана работа по координатам.")
+        print("Выбран режим работы по координатам.")
         while not agent_has_been_choosen:
             # print(pyautogui.locateOnScreen("agents/8.png"))
-            if pyautogui.locateOnScreen("agents/bluesky.png"):
+            findsky = pyautogui.locateOnScreen(f"agents/bluesky.png", region=(580, 722, 830, 240))
+            if findsky:
                 for i in range(3):
                     pyautogui.moveTo(coords)
                     pyautogui.click(coords)
@@ -37,7 +40,7 @@ def lock_agent(path_to_agent_png, coords, working_mode):
     else:
         print("А: Выбран режим работы по изображению")
         while not agent_has_been_choosen:
-            find_agent = pyautogui.locateOnScreen(f"agents/{path_to_agent_png}")
+            find_agent = pyautogui.locateOnScreen(f"agents/{path_to_agent_png}", region=(480, 722, 930, 340))
             if find_agent:
                 pyautogui.moveTo(find_agent)
                 pyautogui.click(find_agent)
@@ -46,7 +49,7 @@ def lock_agent(path_to_agent_png, coords, working_mode):
                     pyautogui.click(956, 813)
                     sleep(0.4)
                 agent_has_been_choosen = True
-                print("--- Агент выбран ---")
+    print("--- Агент выбран ---")
 
 
 def generate_path(agent_name, variant):
@@ -117,11 +120,15 @@ def generate_path(agent_name, variant):
 print("Доступны только агенты из следующего списка: \n\n"
       " [0]Breach   [1]Brimstone    [2]Chamber\n [3]Cypher   [4]Fade         [5]Jett\n [6]BOT      [7]Killjoy      [8]Neon\n [9]Omen     [10]Phoenix     [11]Raze\n [12]Reyna   [13]Sage        [14]Skye\n [15]Sova "
       "   [16]Yoru        [17]Harbor\n")
-print("A: Какого агента вы хотите инсталокнуть? (Можно писать как цифры, так и полное имя)")
+print('Для выбора рандомного агента, укажите "-1" или "Random"')
+print("A: Какого агента вы хотите инсталокнуть? (Можно вводить как индексы, так и полное имя)")
 agent_to_instapick = input("B: Введите Агента: ")
-
-print("\nA: Выберите вид работы: \n    [1] Работа по координатам \n    [2] Работа по поиску изображения")
-work_variant = input("B: Введите выбранную цифру: ")
+if agent_to_instapick == "-1" or agent_to_instapick == "Random":
+    agent_to_instapick = random.choice(agents)
+    work_variant = "2"
+else:
+    print("\nA: Выберите вид работы: \n    [1] Работа по координатам (Дольше) \n    [2] Работа по поиску изображения")
+    work_variant = input("B: Введите выбранную цифру: ")
 if work_variant != "1" and work_variant != "2":
     print("Выбрана неправильная цифра, доступны только 1 или 2.")
     quit()
